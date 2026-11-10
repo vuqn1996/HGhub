@@ -49,18 +49,18 @@ export async function flushPlaybackLog() {
     for (let i = 0; i < entries.length; i += 128) await playbackLogApi.write(entries.slice(i, i + 128));
   });
   try { await writing; }
-  catch { publish({ error: "诊断日志写入失败，请检查可用空间后重新开启" }); }
+  catch { publish({ error: "Failed to write diagnostic logs. Check available storage, then enable logging again." }); }
 }
 
 export function initPlaybackLog() {
   return init ??= playbackLogApi.status().then(saved => {
     publish({ ...saved, ready: true });
     tracePlayback("app.start", { version: __APP_VERSION__, platform: navigator.platform, user_agent: navigator.userAgent, hls_version: Hls.version, media_source: !!window.MediaSource, managed_media_source: "ManagedMediaSource" in window });
-  }).catch(() => { init = undefined; publish({ error: "无法读取诊断日志设置" }); });
+  }).catch(() => { init = undefined; publish({ error: "Unable to load diagnostic log settings" }); });
 }
 
 export async function setPlaybackLog(on: boolean) {
-  if (!state.ready || state.pending) throw new Error("日志设置尚未就绪");
+  if (!state.ready || state.pending) throw new Error("Log settings are not ready yet");
   publish({ pending: true });
   try {
     await flushPlaybackLog();
@@ -73,8 +73,8 @@ export async function setPlaybackLog(on: boolean) {
 export async function copyPlaybackLog() {
   await flushPlaybackLog();
   const text = await playbackLogApi.read();
-  if (!text) throw new Error("尚无诊断日志，请开启后复现问题");
-  if (!navigator.clipboard) throw new Error("当前环境无法使用剪贴板，请从日志目录取出 playback.log");
+  if (!text) throw new Error("No diagnostic logs yet. Enable logging, then reproduce the issue.");
+  if (!navigator.clipboard) throw new Error("Clipboard access is unavailable. Retrieve playback.log from the log folder.");
   await navigator.clipboard.writeText(text);
 }
 

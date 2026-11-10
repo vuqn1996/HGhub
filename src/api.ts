@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { englishError, formatCount } from "./english";
 import type {
   CommentPage, Detail, Paged, PlayInfo, Post, RankItem, User, VideoCard,
 } from "./types";
@@ -47,14 +48,10 @@ async function call<T>(cmd: string, args?: Record<string, unknown>): Promise<T> 
   try {
     return (await invoke(cmd, args)) as T;
   } catch (e) {
-    const msg = typeof e === "string" ? e : "请求失败，请检查网络";
-    // 落盘完整错误链（dns error / connection refused / 证书错误…），toast 只显示截断版
+    const msg = typeof e === "string" ? e : e instanceof Error ? e.message : "Request failed. Please check your connection.";
+    // Keep the full original error in the local diagnostic log.
     logLine(`[api] ${cmd} → ${msg}`);
-    const status = /^HTTP (\d{3})\b/.exec(msg)?.[1];
-    if (status) {
-      throw new Error(`服务器请求失败（HTTP ${status}），请稍后重试或在设置中切换线路`);
-    }
-    throw new Error(msg.length > 140 ? `${msg.slice(0, 140)}…` : msg);
+    throw new Error(englishError(msg));
   }
 }
 
@@ -189,12 +186,7 @@ export async function selfTest(): Promise<string> {
 
 /* ── 格式化 ─────────────────────────────────────────────── */
 
-export const fmt = (n: number | undefined) => {
-  const v = Number(n) || 0;
-  if (v >= 100_000_000) return `${(v / 100_000_000).toFixed(1).replace(/\.0$/, "")}亿`;
-  if (v >= 10_000) return `${(v / 10_000).toFixed(1).replace(/\.0$/, "")}万`;
-  return String(v);
-};
+export const fmt = formatCount;
 
 export const fmtTime = (s: number) => {
   if (!isFinite(s) || s < 0) s = 0;

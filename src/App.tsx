@@ -21,10 +21,10 @@ import { IGrid, IGridF, IHome, IHomeF, ISearch, IUser, IUserF, Logo } from "./ic
 function TabBar() {
   const { tab, setTab, theme } = useStore();
   const items: { k: Tab; label: string }[] = [
-    { k: "home", label: "首页" },
-    { k: "search", label: "搜索" },
-    { k: "category", label: "分类" },
-    { k: "profile", label: "我的" },
+    { k: "home", label: "Home" },
+    { k: "search", label: "Search" },
+    { k: "category", label: "Categories" },
+    { k: "profile", label: "Profile" },
   ];
   /* 细瘦纯文字分栏：只有选中项高亮，没有指示点。
      首页是沉浸视频 → 底栏压深色；搜索/分类/我的 是浅色内容页 →

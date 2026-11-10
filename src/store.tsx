@@ -176,7 +176,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setStrictSecurity = useCallback(async (on: boolean) => {
-    if (!strictSecurityReady) throw new Error("安全设置尚未读取，请重新启动应用");
+    if (!strictSecurityReady) throw new Error("Security settings have not loaded. Please restart the app.");
     setSecurityPending(true);
     try {
       const saved = await api.securitySet(on);
@@ -253,7 +253,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const logout = useCallback(async () => {
     try { await api.logout(); } catch { /* ignore */ }
     setUser(null);
-    toast("已退出登录", "info");
+    toast("Signed out", "info");
   }, [toast]);
 
   const setTheater = useCallback((v: boolean | ((prev: boolean) => boolean)) => {
