@@ -80,7 +80,7 @@ export default function Search({ active, wide }: { active: boolean; wide: boolea
         <form className="flex-1 flex items-center gap-2 h-11 rounded-(--r-ctl) bg-s3 px-3.5 focus-within:bg-s4 transition-colors"
           onSubmit={(e) => { e.preventDefault(); submit(q); }}>
           <ISearch size={17} className="text-mut shrink-0" />
-          <input ref={inputRef} value={genreLabel(q)} onChange={(e) => setQ(e.target.value)} placeholder="Search series, creators, genres…"
+          <input ref={inputRef} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search series, creators, genres…"
             className="flex-1 min-w-0 bg-transparent text-[13.5px] text-on placeholder-dim outline-none" />
           {q && <button type="button" onClick={() => { setQ(""); setSubmitted(""); setItems([]); }} className="w-5 h-5 rounded-full bg-s4 flex items-center justify-center text-mut pressable"><IClose size={11} /></button>}
         </form>

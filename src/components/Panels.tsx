@@ -169,7 +169,7 @@ export function ArticlePanel({ title, html, cover, hot, onClose }: {
     <div className="flex flex-col h-full">
       <div className="shrink-0 flex items-center gap-2 px-4 h-12">
         <span className="text-[13.5px] font-bold text-on">Post details</span>
-        {hot ? <span className="text-[10.5px] text-mut">{fmt(hot)} views</span> : null}
+        {hot ? <span className="text-[10.5px] text-mut">{fmt(hot)} popularity</span> : null}
         <button onClick={onClose} aria-label="Close" className="ml-auto w-7 h-7 rounded-full bg-s3 flex items-center justify-center text-mut pressable">
           <IClose size={13} />
         </button>
